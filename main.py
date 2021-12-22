@@ -1,5 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
 import tensorflow as tf
 from random import choice
 import io
@@ -16,6 +17,19 @@ def load_image(image_path, image_size=(256, 256), preserve_aspect_ratio=True):
   return img
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",
+    "https://same-same.xyz"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():
